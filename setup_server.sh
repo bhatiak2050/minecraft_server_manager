@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Check if java is installed, if not install it
 echo "Checking if java is installed: "
 check=$(dpkg-query -W -f='${Status}' openjdk-8-jre-headless 2>/dev/null | grep -c "ok installed")
 
@@ -10,6 +12,7 @@ else
 	sudo apt-get -y install openjdk-8-jre-headless
 fi
 
+# Selection of server type and version
 echo ""
 echo "Setup server using
 1. Mojang server
@@ -21,7 +24,6 @@ then
 	echo "You have chosen to install Mojang server"
 	echo "Enter version: "
 	read version
-	echo "$version"
 	if [[ $version == '1.16.4' ]]
 	then
 		url="https://launcher.mojang.com/v1/objects/35139deedbd5182953cf1caa23835da59ca3d7cd/server.jar"
@@ -102,7 +104,6 @@ then
 		echo "Aborting"
 		exit
 	fi
-	echo "$url"
 	jar="server.jar"
 else
 	echo "You have chosen to install Spigot 1.16.4 server"
@@ -115,11 +116,10 @@ read dir
 echo "Are you setting up a custom map? (y/n): "
 read custom
 
+# Installation Section
 mkdir $dir
 cd $dir
-
 wget -O $jar $url
-
 echo ""
 echo "Initialising server settings... "
 java -jar $jar --initSettings >/dev/null
@@ -133,6 +133,86 @@ if [[ $custom == 'y' ]]
 then
 	sed -i "s/enable-command-block=false/enable-command-block=true/g" server.properties
 fi
+
+# Forge section
+if [[ $choice == 1 ]]
+then
+	echo "Install forge? (y/n)"
+	read ins_forge
+	if [[ $ins_forge == 'y' ]]
+	then
+		furl=""
+		if [[ $version == '1.16.4' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.4-35.0.2/forge-1.16.4-35.0.2-installer.jar"
+		elif [[ $version == '1.16.3' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.3-34.1.0/forge-1.16.3-34.1.0-installer.jar"
+		elif [[ $version == '1.16.2' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.2-33.0.61/forge-1.16.2-33.0.61-installer.jar"
+		elif [[ $version == '1.16.1' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.1-32.0.108/forge-1.16.1-32.0.108-installer.jar"
+		elif [[ $version == '1.15.2' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.2-31.2.0/forge-1.15.2-31.2.0-installer.jar"
+		elif [[ $version == '1.15.1' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.1-30.0.51/forge-1.15.1-30.0.51-installer.jar"
+		elif [[ $version == '1.15' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15-29.0.4/forge-1.15-29.0.4-installer.jar"
+		elif [[ $version == '1.14.4' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.14.4-28.2.0/forge-1.14.4-28.2.0-installer.jar"
+		elif [[ $version == '1.14.3' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.14.3-27.0.60/forge-1.14.3-27.0.60-installer.jar"
+		elif [[ $version == '1.14.2' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.14.2-26.0.63/forge-1.14.2-26.0.63-installer.jar"
+		elif [[ $version == '1.13.2' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.13.2-25.0.219/forge-1.13.2-25.0.219-installer.jar"
+		elif [[ $version == '1.12.2' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.5.2854/forge-1.12.2-14.23.5.2854-installer.jar"
+		elif [[ $version == '1.12.1' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.1-14.22.1.2478/forge-1.12.1-14.22.1.2478-installer.jar"
+		elif [[ $version == '1.12' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12-14.21.1.2387/forge-1.12-14.21.1.2387-installer.jar"
+		elif [[ $version == '1.11.2' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.11.2-13.20.1.2386/forge-1.11.2-13.20.1.2386-installer.jar"
+		elif [[ $version == '1.11' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.11-13.19.1.2189/forge-1.11-13.19.1.2189-installer.jar"
+		elif [[ $version == '1.10.2' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.10.2-12.18.3.2185/forge-1.10.2-12.18.3.2185-installer.jar"
+		elif [[ $version == '1.10' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.10-12.18.0.2000-1.10.0/forge-1.10-12.18.0.2000-1.10.0-installer.jar"
+		else
+			echo "Forge doesn't support $version"
+			echo "Aborting"
+		fi
+
+		if [[ $furl != "" ]]
+		then
+			wget -O "forge_installer.jar" $furl
+			java -jar forge_installer.jar --installServer 
+			rm forge_installer.jar
+			rm forge_installer.jar.log
+			jar="forge*.jar"
+		fi
+	fi
+fi
+
+
 echo ""
 echo "Server setup complete. run by issuing the command: "
 echo "java -jar -Xms512M -Xmx2G -XX:+UseG1GC -jar $jar --nogui"
