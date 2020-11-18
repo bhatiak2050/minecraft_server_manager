@@ -200,10 +200,9 @@ echo "Initialising server settings... "
 java -jar $jar >/dev/null
 echo "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."
 sed -i "s/eula=false/eula=true/g" eula.txt
-echo "eula=false->true"
 sed -i "s/online-mode=true/online-mode=false/g" server.properties
-echo "online-mode=true->false"
 sed -i "s/snooper-enabled=true/snooper-enabled=false/g" server.properties
+sed -i "s/view-distance=10/view-distance=4/g" server.properties
 if [[ $custom == 'y' ]]
 then
 	sed -i "s/enable-command-block=false/enable-command-block=true/g" server.properties
@@ -290,4 +289,4 @@ fi
 
 echo ""
 echo "Server setup complete. run by issuing the command: "
-echo "java -jar -Xms512M -Xmx2G -XX:+UseG1GC -jar $jar --nogui"
+echo "java -jar -Xms512M -Xmx1560M -XX:+UseG1GC -jar $jar --nogui"
