@@ -17,6 +17,7 @@ echo ""
 echo "Setup server using
 1. Mojang server
 2. Spigot server
+3. Paper server
 Choice: "
 read choice
 if [[ $choice == 1 ]]
@@ -105,10 +106,84 @@ then
 		exit
 	fi
 	jar="server.jar"
-else
-	echo "You have chosen to install Spigot 1.16.4 server"
-	url="https://bit.ly/3k3gXXh"
+elif [[ $choice == 2 ]]
+	echo "You have chosen to install Spigot server"
+	echo "Enter version: "
+	read version
+	if [[ $version == '1.16.4' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.16.4.jar"
+	elif [[ $version == '1.16.3' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.16.3.jar"
+	elif [[ $version == '1.16.2' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.16.2.jar"
+	elif [[ $version == '1.16.1' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.16.1.jar"
+	elif [[ $version == '1.15.2' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.15.2.jar"
+	elif [[ $version == '1.15.1' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.15.1.jar"
+	elif [[ $version == '1.15' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.15.jar"
+	elif [[ $version == '1.14.4' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.14.4.jar"
+	elif [[ $version == '1.14.3' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.14.3.jar"
+	elif [[ $version == '1.14.2' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.14.2.jar"
+	elif [[ $version == '1.14.1' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.14.1.jar"
+	elif [[ $version == '1.14' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.14.jar"
+	elif [[ $version == '1.13.2' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.13.2.jar"
+	elif [[ $version == '1.13.1' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.13.1.jar"
+	elif [[ $version == '1.13' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.13.jar"
+	elif [[ $version == '1.12.2' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.12.2.jar"
+	elif [[ $version == '1.12.1' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.12.1.jar"
+	elif [[ $version == '1.12' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.12.jar"
+	elif [[ $version == '1.11.2' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.11.2.jar"
+	elif [[ $version == '1.11.1' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.11.1.jar"
+	elif [[ $version == '1.11' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.11.jar"
+	else
+		echo "You have entered an invalid entry, or a version less than 1.10 (for spigot). Please enter a version above 1.10."
+		echo "Aborting"
+		exit
+	fi
 	jar="spigot.jar"
+else
+then
+	echo "You have chosen to install Paper 1.16.4 server"
+	url="https://papermc.io/api/v1/paper/1.16.4/283/download"
+	jar="paper.jar"
 fi
 
 echo "Enter the name of the server: "
