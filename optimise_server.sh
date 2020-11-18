@@ -15,7 +15,7 @@ then
     sed -i "s/item: 2.5/item: 4.0/g" spigot.yml
 fi
 if [[ $choice == 2 ]]
-else
+then
     sed -i "s/max-auto-save-chunks-per-tick: 24/max-auto-save-chunks-per-tick: 6/g" paper.yml
     sed -i "s/max-entity-collisions: 8/max-entity-collisions: 2/g" paper.yml
     sed -i "s/optimize-explosions: false/optimize-explosions: true/g" paper.yml
