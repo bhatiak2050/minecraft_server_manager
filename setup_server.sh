@@ -107,6 +107,7 @@ then
 	fi
 	jar="server.jar"
 elif [[ $choice == 2 ]]
+then
 	echo "You have chosen to install Spigot server"
 	echo "Enter version: "
 	read version
@@ -180,7 +181,6 @@ elif [[ $choice == 2 ]]
 	fi
 	jar="spigot.jar"
 else
-then
 	echo "You have chosen to install Paper 1.16.4 server"
 	url="https://papermc.io/api/v1/paper/1.16.4/283/download"
 	jar="paper.jar"
@@ -197,7 +197,7 @@ cd $dir
 wget -O $jar $url
 echo ""
 echo "Initialising server settings... "
-java -jar $jar --initSettings >/dev/null
+java -jar $jar >/dev/null
 echo "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."
 sed -i "s/eula=false/eula=true/g" eula.txt
 echo "eula=false->true"
