@@ -182,7 +182,7 @@ then
 	jar="spigot.jar"
 else
 	echo "You have chosen to install Paper 1.16.4 server"
-	url="https://papermc.io/api/v1/paper/1.16.4/283/download"
+	url="https://papermc.io/api/v1/paper/1.16.4/319/download"
 	jar="paper.jar"
 fi
 
@@ -200,9 +200,9 @@ echo "Initialising server settings... "
 java -jar $jar >/dev/null
 echo "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."
 sed -i "s/eula=false/eula=true/g" eula.txt
-sed -i "s/online-mode=true/online-mode=false/g" server.properties
+# sed -i "s/online-mode=true/online-mode=false/g" server.properties
+sed -i "s/allow-flight=true/allow-flight=false/g" server.properties
 sed -i "s/snooper-enabled=true/snooper-enabled=false/g" server.properties
-sed -i "s/view-distance=10/view-distance=4/g" server.properties
 if [[ $custom == 'y' ]]
 then
 	sed -i "s/enable-command-block=false/enable-command-block=true/g" server.properties

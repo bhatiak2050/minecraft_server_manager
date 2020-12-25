@@ -7,7 +7,7 @@ read choice
 
 if [[ $choice == 1 || $choice == 2 ]]
 then
-    sed -i "s/view-distance=10/view-distance=4/g" server.properties
+    sed -i "s/view-distance=10/view-distance=6/g" server.properties
     sed -i "s/mob-spawn-range: 8/mob-spawn-range: 3/g" spigot.yml
     sed -i "s/period-in-ticks: 600/period-in-ticks: 400/g" bukkit.yml
     sed -i "s/tick-inactive-villagers: true/tick-inactive-villagers: false/g" spigot.yml
