@@ -1,15 +1,37 @@
 #!/bin/bash
 
+function edit_settings {
+	echo "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."
+	sed -i "s/eula=false/eula=true/g" eula.txt
+	# sed -i "s/online-mode=true/online-mode=false/g" server.properties
+	sed -i "s/allow-flight=false/allow-flight=true/g" server.properties
+	sed -i "s/snooper-enabled=true/snooper-enabled=false/g" server.properties
+	if [[ $custom == 'y' ]]
+	then
+		sed -i "s/enable-command-block=false/enable-command-block=true/g" server.properties
+	fi	
+}
+
+function install_normal {
+	mkdir $dir
+	cd $dir
+	wget -O $jar $url
+	echo ""
+	echo "Initialising server settings... "
+	java -jar $jar >/dev/null
+	edit_settings
+}
+
 # Check if java is installed, if not install it
 echo "Checking if java is installed: "
-check=$(dpkg-query -W -f='${Status}' openjdk-8-jre-headless 2>/dev/null | grep -c "ok installed")
+check=$(dpkg-query -W -f='${Status}' openjdk-11-jre-headless 2>/dev/null | grep -c "ok installed")
 
 if [[ $check -eq 1 ]]
 then
 	echo "Java is installed. Proceeding."
 else
 	echo "Java is NOT installed. Installing java"
-	sudo apt-get -y install openjdk-8-jre-headless
+	sudo apt-get -y install openjdk-11-jre-headless
 fi
 
 # Selection of server type and version
@@ -182,7 +204,7 @@ then
 	jar="spigot.jar"
 else
 	echo "You have chosen to install Paper 1.16.4 server"
-	url="https://papermc.io/api/v1/paper/1.16.4/319/download"
+	url="https://papermc.io/api/v2/projects/paper/versions/1.16.4/builds/344/downloads/paper-1.16.4-344.jar"
 	jar="paper.jar"
 fi
 
@@ -191,30 +213,21 @@ read dir
 echo "Are you setting up a custom map? (y/n): "
 read custom
 
-# Installation Section
-mkdir $dir
-cd $dir
-wget -O $jar $url
-echo ""
-echo "Initialising server settings... "
-java -jar $jar >/dev/null
-echo "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula)."
-sed -i "s/eula=false/eula=true/g" eula.txt
-# sed -i "s/online-mode=true/online-mode=false/g" server.properties
-sed -i "s/allow-flight=true/allow-flight=false/g" server.properties
-sed -i "s/snooper-enabled=true/snooper-enabled=false/g" server.properties
-if [[ $custom == 'y' ]]
-then
-	sed -i "s/enable-command-block=false/enable-command-block=true/g" server.properties
-fi
-
-# Forge section
+# Mods section
 if [[ $choice == 1 ]]
 then
-	echo "Install forge? (y/n)"
-	read ins_forge
-	if [[ $ins_forge == 'y' ]]
+
+	echo "Install mod loader?
+1. Forge
+2. Fabric
+3. Cancel
+Enter your choice: "
+	read ins_mods
+
+	# Forge
+	if [[ $ins_mods == '1' ]]
 	then
+		install_normal
 		furl=""
 		if [[ $version == '1.16.4' ]]
 		then
@@ -274,7 +287,6 @@ then
 			echo "Forge doesn't support $version"
 			echo "Aborting"
 		fi
-
 		if [[ $furl != "" ]]
 		then
 			wget -O "forge_installer.jar" $furl
@@ -283,10 +295,27 @@ then
 			rm forge_installer.jar.log
 			jar="forge*.jar"
 		fi
+	# Fabric
+	elif [[ $ins_mods == '2' ]]
+	then
+		mkdir $dir
+		cd $dir
+		wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.6.1.51/fabric-installer-0.6.1.51.jar
+		java -jar fabric-installer.jar server -downloadMinecraft
+		rm fabric-installer*.jar
+		echo "Running Fabric for the first time, please wait..."
+		java -jar fabric-server-launch.jar >/dev/null
+		edit_settings
+		jar="fabric-server-launch.jar"
+	# No Mod
+	else
+		echo ""
+		echo "Skipping mod installation"
+		install_normal
 	fi
+else
+	install_normal
 fi
-
-
 echo ""
 echo "Server setup complete. run by issuing the command: "
 echo "java -jar -Xms512M -Xmx1560M -XX:+UseG1GC -jar $jar --nogui"
