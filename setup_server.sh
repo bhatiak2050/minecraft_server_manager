@@ -22,7 +22,7 @@ function install_normal {
 	edit_settings
 }
 
-if [[ $1 == cli]]
+if [[ $1 == cli ]]
 then
 	echo "Usage: <Server type> <Version> <Name> <Custom map> [<Mod loader>]"
 	echo "Server name will be the name of the directory where server will be installed."
@@ -44,7 +44,7 @@ else
 fi
 
 # Selection of server type and version
-if [[ $1 == ""]]
+if [[ $1 == "" ]]
 then
 	echo ""
 	echo "Setup server using
