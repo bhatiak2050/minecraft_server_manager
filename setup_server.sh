@@ -22,6 +22,15 @@ function install_normal {
 	edit_settings
 }
 
+if [[ $1 == cli]]
+then
+	echo "Usage: <Server type> <Version> <Name> <Custom map> [<Mod loader>]"
+	echo "Server name will be the name of the directory where server will be installed."
+	echo "Do not provide Mod loader argument for Spigot or paper servers."
+	echo "Server type options: 1. Mojang, 2. Spigot, 3. Paper."
+	echo "Mod loader options: 1. Forge, 2. Fabric, 3. Cancel"
+fi
+
 # Check if java is installed, if not install it
 echo "Checking if java is installed: "
 check=$(dpkg-query -W -f='${Status}' openjdk-11-jre-headless 2>/dev/null | grep -c "ok installed")
@@ -35,18 +44,30 @@ else
 fi
 
 # Selection of server type and version
-echo ""
-echo "Setup server using
+if [[ $1 == ""]]
+then
+	echo ""
+	echo "Setup server using
 1. Mojang server
 2. Spigot server
 3. Paper server
 Choice: "
-read choice
+	read choice
+else
+	choice=$1
+fi
+
 if [[ $choice == 1 ]]
 then
 	echo "You have chosen to install Mojang server"
-	echo "Enter version: "
-	read version
+	if [[ $2 == "" ]]
+	then
+		echo "Enter version: "
+		read version
+	else
+		version=$2
+	fi
+
 	if [[ $version == '1.16.4' ]]
 	then
 		url="https://launcher.mojang.com/v1/objects/35139deedbd5182953cf1caa23835da59ca3d7cd/server.jar"
@@ -131,8 +152,14 @@ then
 elif [[ $choice == 2 ]]
 then
 	echo "You have chosen to install Spigot server"
-	echo "Enter version: "
-	read version
+	if [[ $2 == "" ]]
+	then
+		echo "Enter version: "
+		read version
+	else
+		version=$2
+	fi
+
 	if [[ $version == '1.16.4' ]]
 	then
 		url="https://cdn.getbukkit.org/spigot/spigot-1.16.4.jar"
@@ -208,21 +235,38 @@ else
 	jar="paper.jar"
 fi
 
-echo "Enter the name of the server: "
-read dir
-echo "Are you setting up a custom map? (y/n): "
-read custom
+if [[ $3 == "" ]]
+then
+	echo "Enter the name of the server: "
+	read dir
+else
+	dir=$3
+fi
+if [[ $4 == "" ]]
+then
+	echo "Are you setting up a custom map? (y/n): "
+	read custom
+else
+	custom=$4
+fi
+
 
 # Mods section
 if [[ $choice == 1 ]]
 then
 
-	echo "Install mod loader?
+	if [[ $5 == "" ]]
+	then
+		echo "Install mod loader?
 1. Forge
 2. Fabric
 3. Cancel
-Enter your choice: "
-	read ins_mods
+Choice: "
+		read ins_mods
+	else
+		ins_mods=$5
+	fi
+
 
 	# Forge
 	if [[ $ins_mods == '1' ]]
