@@ -9,7 +9,7 @@ This is a script I made that will allow the user to easily and automatically cre
 - CLI interface for programmatic access.
 
 ### CLI Usage
-`$ <Server type> <Version> <Name> <Custom map> [<Mod loader>]`
+`$ setup_server.sh <Server type> <Version> <Name> <Custom map> [<Mod loader>]`
 
 - Server name will be the name of the directory where server will be led.
 - NOTE: Do not provide Mod loader argument for Spigot or paper servers.
