@@ -68,7 +68,10 @@ then
 		version=$2
 	fi
 
-	if [[ $version == '1.16.4' ]]
+	if [[ $version == '1.16.5' ]]
+	then
+		url="https://launcher.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar"
+	elif [[ $version == '1.16.4' ]]
 	then
 		url="https://launcher.mojang.com/v1/objects/35139deedbd5182953cf1caa23835da59ca3d7cd/server.jar"
 	elif [[ $version == '1.16.3' ]]
@@ -143,8 +146,11 @@ then
 	elif [[ $version == '1.10' ]]
 	then
 		url="https://launcher.mojang.com/v1/objects/a96617ffdf5dabbb718ab11a9a68e50545fc5bee/server.jar"
+	elif [[ $version == '1.8.9' ]]
+	then
+		url="https://launcher.mojang.com/v1/objects/b58b2ceb36e01bcd8dbf49c8fb66c55a9f0676cd/server.jar"		
 	else
-		echo "You have entered an invalid entry, or a version less than 1.10. Please enter a version above 1.9."
+		echo "You have entered an invalid entry, or a version less than 1.8.9 (not inc. 1.9.x). Please enter a version above 1.8.9."
 		echo "Aborting"
 		exit
 	fi
@@ -159,8 +165,10 @@ then
 	else
 		version=$2
 	fi
-
-	if [[ $version == '1.16.4' ]]
+	if [[ $version == '1.16.5' ]]
+	then
+		url="https://cdn.getbukkit.org/spigot/spigot-1.16.5.jar"
+	elif [[ $version == '1.16.4' ]]
 	then
 		url="https://cdn.getbukkit.org/spigot/spigot-1.16.4.jar"
 	elif [[ $version == '1.16.3' ]]
@@ -230,8 +238,46 @@ then
 	fi
 	jar="spigot.jar"
 else
-	echo "You have chosen to install Paper 1.16.4 server"
-	url="https://papermc.io/api/v2/projects/paper/versions/1.16.4/builds/344/downloads/paper-1.16.4-344.jar"
+	echo "You have chosen to install Paper server"
+	if [[ $2 == "" ]]
+	then
+		echo "Enter version: "
+		read version
+	else
+		version=$2
+	fi
+	if [[ $version == '1.16.5' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/436/downloads/paper-1.16.5-436.jar"
+	elif [[ $version == '1.15.2' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.15.2/builds/391/downloads/paper-1.15.2-391.jar"
+	elif [[ $version == '1.14.4' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.14.4/builds/243/downloads/paper-1.14.4-243.jar"
+	elif [[ $version == '1.13.2' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.13.2/builds/655/downloads/paper-1.13.2-655.jar"
+	elif [[ $version == '1.12.2' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.12.2/builds/1618/downloads/paper-1.12.2-1618.jar"
+	elif [[ $version == '1.11.2' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.11.2/builds/1104/downloads/paper-1.11.2-1104.jar"
+	elif [[ $version == '1.10.2' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.10.2/builds/916/downloads/paper-1.10.2-916.jar"
+	elif [[ $version == '1.9.4' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.9.4/builds/773/downloads/paper-1.9.4-773.jar"
+	elif [[ $version == '1.8.8' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.8.8/builds/443/downloads/paper-1.8.8-443.jar"
+	else
+		echo "You have entered an invalid entry."
+		echo "Aborting"
+		exit
+	fi	
 	jar="paper.jar"
 fi
 
@@ -267,18 +313,20 @@ Choice: "
 		ins_mods=$5
 	fi
 
-
 	# Forge
 	if [[ $ins_mods == '1' ]]
 	then
 		install_normal
 		furl=""
-		if [[ $version == '1.16.4' ]]
+		if [[ $version == '1.16.5' ]]
 		then
-			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.4-35.0.2/forge-1.16.4-35.0.2-installer.jar"
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.5-36.0.1/forge-1.16.5-36.0.1-installer.jar"
+		elif [[ $version == '1.16.4' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.4-35.1.37/forge-1.16.4-35.1.37-installer.jar"
 		elif [[ $version == '1.16.3' ]]
 		then
-			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.3-34.1.0/forge-1.16.3-34.1.0-installer.jar"
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.3-34.1.42/forge-1.16.3-34.1.42-installer.jar"
 		elif [[ $version == '1.16.2' ]]
 		then
 			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.2-33.0.61/forge-1.16.2-33.0.61-installer.jar"
@@ -287,7 +335,7 @@ Choice: "
 			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.1-32.0.108/forge-1.16.1-32.0.108-installer.jar"
 		elif [[ $version == '1.15.2' ]]
 		then
-			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.2-31.2.0/forge-1.15.2-31.2.0-installer.jar"
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.2-31.2.47/forge-1.15.2-31.2.47-installer.jar"
 		elif [[ $version == '1.15.1' ]]
 		then
 			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.15.1-30.0.51/forge-1.15.1-30.0.51-installer.jar"
@@ -327,6 +375,9 @@ Choice: "
 		elif [[ $version == '1.10' ]]
 		then
 			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.10-12.18.0.2000-1.10.0/forge-1.10-12.18.0.2000-1.10.0-installer.jar"
+		elif [[ $version == '1.8.9' ]]
+		then
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-installer.jar"			
 		else
 			echo "Forge doesn't support $version"
 			echo "Aborting"
@@ -345,7 +396,7 @@ Choice: "
 		mkdir $dir
 		cd $dir
 		wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.6.1.51/fabric-installer-0.6.1.51.jar
-		java -jar fabric-installer.jar server -downloadMinecraft
+		java -jar fabric-installer.jar server -mcversion $version -downloadMinecraft
 		rm fabric-installer*.jar
 		echo "Running Fabric for the first time, please wait..."
 		java -jar fabric-server-launch.jar >/dev/null
@@ -362,4 +413,4 @@ else
 fi
 echo ""
 echo "Server setup complete. run by issuing the command: "
-echo "java -jar -Xms512M -Xmx1560M -XX:+UseG1GC -jar $jar --nogui"
+echo "java -jar $jar --nogui"
