@@ -13,6 +13,25 @@ function edit_settings {
 }
 
 function install_normal {
+	if [[ $choice == 3 ]]
+	then
+		java_src="openjdk-11-jre-headless"
+	else
+		java_src="openjdk-8-jre-headless"
+	fi
+
+	# Check if java is installed, if not install it
+	echo "Checking if java is installed: "
+	check=$(dpkg-query -W -f='${Status}' $java_src 2>/dev/null | grep -c "ok installed")
+
+	if [[ $check -eq 1 ]]
+	then
+		echo "Java is installed. Proceeding."
+	else
+		echo "Java is NOT installed. Installing java"
+		sudo apt-get -y install $java_src
+	fi
+
 	mkdir $dir
 	cd $dir
 	wget -O $jar $url
@@ -29,18 +48,6 @@ then
 	echo "Do not provide Mod loader argument for Spigot or paper servers."
 	echo "Server type options: 1. Mojang, 2. Spigot, 3. Paper."
 	echo "Mod loader options: 1. Forge, 2. Fabric, 3. Cancel"
-fi
-
-# Check if java is installed, if not install it
-echo "Checking if java is installed: "
-check=$(dpkg-query -W -f='${Status}' openjdk-11-jre-headless 2>/dev/null | grep -c "ok installed")
-
-if [[ $check -eq 1 ]]
-then
-	echo "Java is installed. Proceeding."
-else
-	echo "Java is NOT installed. Installing java"
-	sudo apt-get -y install openjdk-11-jre-headless
 fi
 
 # Selection of server type and version
