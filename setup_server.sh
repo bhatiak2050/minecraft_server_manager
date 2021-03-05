@@ -10,27 +10,33 @@ function edit_settings {
 	then
 		sed -i "s/enable-command-block=false/enable-command-block=true/g" server.properties
 	fi	
+	if [[ $whitelist == 'y' ]]
+	then
+		sed -i "s/white-list=false/white-list=true/g" server.properties
+		sed -i "s/enforce-whitelist=false/enforce-whitelist=true/g" server.properties
+	fi	
 }
 
 function install_normal {
+	java8=$(dpkg-query -W -f='${Status}' openjdk-8-jre-headless 2>/dev/null | grep -c "ok installed")
+	java11=$(dpkg-query -W -f='${Status}' openjdk-11-jre-headless 2>/dev/null | grep -c "ok installed")
+
+	echo "Installing Java"
 	if [[ $choice == 3 ]]
 	then
-		java_src="openjdk-11-jre-headless"
+		if [[ $java8 == 1 ]]
+		then
+			sudo apt autoremove -y openjdk-8-jre-headless
+		fi
+		sudo apt install -y openjdk-11-jre-headless
 	else
-		java_src="openjdk-8-jre-headless"
+		if [[ $java11 == 1 ]]
+		then
+			sudo apt autoremove -y openjdk-11-jre-headless
+		fi
+		sudo apt install -y openjdk-8-jre-headless
 	fi
-
-	# Check if java is installed, if not install it
-	echo "Checking if java is installed: "
-	check=$(dpkg-query -W -f='${Status}' $java_src 2>/dev/null | grep -c "ok installed")
-
-	if [[ $check -eq 1 ]]
-	then
-		echo "Java is installed. Proceeding."
-	else
-		echo "Java is NOT installed. Installing java"
-		sudo apt-get -y install $java_src
-	fi
+	echo "Java installation Complete"
 
 	mkdir $dir
 	cd $dir
@@ -41,13 +47,36 @@ function install_normal {
 	edit_settings
 }
 
+function install_fabric {
+	java11=$(dpkg-query -W -f='${Status}' openjdk-11-jre-headless 2>/dev/null | grep -c "ok installed")
+
+	echo "Installing Java"
+	if [[ $java11 == 1 ]]
+	then
+		sudo apt autoremove -y openjdk-11-jre-headless
+	fi
+	sudo apt install -y openjdk-8-jre-headless
+
+	echo "Java installation Complete"
+
+	mkdir $dir
+	cd $dir
+	wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.6.1.51/fabric-installer-0.6.1.51.jar
+	java -jar fabric-installer.jar server -mcversion $version -downloadMinecraft
+	rm fabric-installer*.jar
+	echo "Running Fabric for the first time, please wait..."
+	java -jar fabric-server-launch.jar >/dev/null
+	edit_settings
+}
+
 if [[ $1 == cli ]]
 then
-	echo "Usage: <Server type> <Version> <Name> <Custom map> [<Mod loader>]"
+	echo "Usage: <Server type> <Version> <Name> <Custom map?> <Whitelist?> [<Mod loader>]"
 	echo "Server name will be the name of the directory where server will be installed."
-	echo "Do not provide Mod loader argument for Spigot or paper servers."
+	echo "Do not provide Mod loader argument for Spigot or Paper servers."
 	echo "Server type options: 1. Mojang, 2. Spigot, 3. Paper."
 	echo "Mod loader options: 1. Forge, 2. Fabric, 3. Cancel"
+	exit
 fi
 
 # Selection of server type and version
@@ -75,7 +104,7 @@ then
 		version=$2
 	fi
 
-	if [[ $version == '1.16.5' ]]
+	if [[ $version == '1.16.5' || $version == 'latest' ]]
 	then
 		url="https://launcher.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar"
 	elif [[ $version == '1.16.4' ]]
@@ -172,7 +201,7 @@ then
 	else
 		version=$2
 	fi
-	if [[ $version == '1.16.5' ]]
+	if [[ $version == '1.16.5' || $version == 'latest' ]]
 	then
 		url="https://cdn.getbukkit.org/spigot/spigot-1.16.5.jar"
 	elif [[ $version == '1.16.4' ]]
@@ -253,9 +282,9 @@ else
 	else
 		version=$2
 	fi
-	if [[ $version == '1.16.5' ]]
+	if [[ $version == '1.16.5' || $version == 'latest' ]]
 	then
-		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/478/downloads/paper-1.16.5-478.jar"
+		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/526/downloads/paper-1.16.5-526.jar"
 	elif [[ $version == '1.15.2' ]]
 	then
 		url="https://papermc.io/api/v2/projects/paper/versions/1.15.2/builds/391/downloads/paper-1.15.2-391.jar"
@@ -303,12 +332,20 @@ else
 	custom=$4
 fi
 
+if [[ $5 == "" ]]
+then
+	echo "Enable Whitelist? (y/n): "
+	read whitelist
+else
+	whitelist=$5
+fi
+
 
 # Mods section
 if [[ $choice == 1 ]]
 then
 
-	if [[ $5 == "" ]]
+	if [[ $6 == "" ]]
 	then
 		echo "Install mod loader?
 1. Forge
@@ -317,7 +354,7 @@ then
 Choice: "
 		read ins_mods
 	else
-		ins_mods=$5
+		ins_mods=$6
 	fi
 
 	# Forge
@@ -325,9 +362,9 @@ Choice: "
 	then
 		install_normal
 		furl=""
-		if [[ $version == '1.16.5' ]]
+		if [[ $version == '1.16.5' || $version == 'latest' ]]
 		then
-			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.5-36.0.42/forge-1.16.5-36.0.42-installer.jar"
+			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.5-36.0.46/forge-1.16.5-36.0.46-installer.jar"
 		elif [[ $version == '1.16.4' ]]
 		then
 			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.4-35.1.37/forge-1.16.4-35.1.37-installer.jar"
@@ -400,14 +437,11 @@ Choice: "
 	# Fabric
 	elif [[ $ins_mods == '2' ]]
 	then
-		mkdir $dir
-		cd $dir
-		wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.6.1.51/fabric-installer-0.6.1.51.jar
-		java -jar fabric-installer.jar server -mcversion $version -downloadMinecraft
-		rm fabric-installer*.jar
-		echo "Running Fabric for the first time, please wait..."
-		java -jar fabric-server-launch.jar >/dev/null
-		edit_settings
+		if [[ $version == 'latest' ]]
+		then
+			version='1.16.5'
+		fi
+		install_fabric
 		jar="fabric-server-launch.jar"
 	# No Mod
 	else
