@@ -26,15 +26,15 @@ function install_normal {
 	then
 		if [[ $java8 == 1 ]]
 		then
-			sudo apt autoremove -y openjdk-8-jre-headless
+			apt autoremove -y openjdk-8-jre-headless
 		fi
-		sudo apt install -y openjdk-11-jre-headless
+		apt install -y openjdk-11-jre-headless
 	else
 		if [[ $java11 == 1 ]]
 		then
-			sudo apt autoremove -y openjdk-11-jre-headless
+			apt autoremove -y openjdk-11-jre-headless
 		fi
-		sudo apt install -y openjdk-8-jre-headless
+		apt install -y openjdk-8-jre-headless
 	fi
 	echo "Java installation Complete"
 
@@ -53,9 +53,9 @@ function install_fabric {
 	echo "Installing Java"
 	if [[ $java11 == 1 ]]
 	then
-		sudo apt autoremove -y openjdk-11-jre-headless
+		apt autoremove -y openjdk-11-jre-headless
 	fi
-	sudo apt install -y openjdk-8-jre-headless
+	apt install -y openjdk-8-jre-headless
 
 	echo "Java installation Complete"
 
@@ -76,6 +76,7 @@ then
 	echo "Do not provide Mod loader argument for Spigot or Paper servers."
 	echo "Server type options: 1. Mojang, 2. Spigot, 3. Paper."
 	echo "Mod loader options: 1. Forge, 2. Fabric, 3. Cancel"
+	echo "This script needs to be run with elavated priviledges (sudo)."
 	exit
 fi
 
