@@ -26,13 +26,13 @@ function install_normal {
 	then
 		if [[ $java8 == 1 ]]
 		then
-			apt autoremove -y openjdk-8-jre-headless
+			apt remove -y openjdk-8-jre-headless
 		fi
 		apt install -y openjdk-11-jre-headless
 	else
 		if [[ $java11 == 1 ]]
 		then
-			apt autoremove -y openjdk-11-jre-headless
+			apt remove -y openjdk-11-jre-headless
 		fi
 		apt install -y openjdk-8-jre-headless
 	fi
@@ -61,7 +61,7 @@ function install_fabric {
 
 	mkdir $dir
 	cd $dir
-	wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.6.1.51/fabric-installer-0.6.1.51.jar
+	wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.7.3/fabric-installer-0.7.3.jar
 	java -jar fabric-installer.jar server -mcversion $version -downloadMinecraft
 	rm fabric-installer*.jar
 	echo "Running Fabric for the first time, please wait..."
@@ -285,7 +285,7 @@ else
 	fi
 	if [[ $version == '1.16.5' || $version == 'latest' ]]
 	then
-		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/526/downloads/paper-1.16.5-526.jar"
+		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/661/downloads/paper-1.16.5-661.jar"
 	elif [[ $version == '1.15.2' ]]
 	then
 		url="https://papermc.io/api/v2/projects/paper/versions/1.15.2/builds/391/downloads/paper-1.15.2-391.jar"
@@ -365,7 +365,7 @@ Choice: "
 		furl=""
 		if [[ $version == '1.16.5' || $version == 'latest' ]]
 		then
-			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.5-36.0.46/forge-1.16.5-36.0.46-installer.jar"
+			furl="https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.1.16/forge-1.16.5-36.1.16-installer.jar"
 		elif [[ $version == '1.16.4' ]]
 		then
 			furl="https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.4-35.1.37/forge-1.16.4-35.1.37-installer.jar"
