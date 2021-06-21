@@ -22,19 +22,27 @@ function install_normal {
 	java11=$(dpkg-query -W -f='${Status}' openjdk-11-jre-headless 2>/dev/null | grep -c "ok installed")
 
 	echo "Installing Java"
-	if [[ $choice == 3 ]]
+
+	if [[ $version > '1.16.5' ]]
 	then
-		if [[ $java8 == 1 ]]
-		then
-			apt remove -y openjdk-8-jre-headless
-		fi
-		apt install -y openjdk-11-jre-headless
+		apt remove -y openjdk-8-jre-headless
+		apt remove -y openjdk-11-jre-headless
+		apt install -y openjdk-16-jre-headless
 	else
-		if [[ $java11 == 1 ]]
+		if [[ $choice == 3 ]]
 		then
-			apt remove -y openjdk-11-jre-headless
+			if [[ $java8 == 1 ]]
+			then
+				apt remove -y openjdk-8-jre-headless
+			fi
+			apt install -y openjdk-11-jre-headless
+		else
+			if [[ $java11 == 1 ]]
+			then
+				apt remove -y openjdk-11-jre-headless
+			fi
+			apt install -y openjdk-8-jre-headless
 		fi
-		apt install -y openjdk-8-jre-headless
 	fi
 	echo "Java installation Complete"
 
@@ -51,17 +59,24 @@ function install_fabric {
 	java11=$(dpkg-query -W -f='${Status}' openjdk-11-jre-headless 2>/dev/null | grep -c "ok installed")
 
 	echo "Installing Java"
-	if [[ $java11 == 1 ]]
+	if [[ $version > '1.16.5' ]]
 	then
-		apt autoremove -y openjdk-11-jre-headless
+		apt remove -y openjdk-8-jre-headless
+		apt remove -y openjdk-11-jre-headless
+		apt install -y openjdk-16-jre-headless
+	else
+		if [[ $java11 == 1 ]]
+		then
+			apt remove -y openjdk-11-jre-headless
+		fi
+		apt install -y openjdk-8-jre-headless
 	fi
-	apt install -y openjdk-8-jre-headless
 
 	echo "Java installation Complete"
 
 	mkdir $dir
 	cd $dir
-	wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.7.3/fabric-installer-0.7.3.jar
+	wget -O fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.7.4/fabric-installer-0.7.4.jar
 	java -jar fabric-installer.jar server -mcversion $version -downloadMinecraft
 	rm fabric-installer*.jar
 	echo "Running Fabric for the first time, please wait..."
@@ -105,7 +120,10 @@ then
 		version=$2
 	fi
 
-	if [[ $version == '1.16.5' || $version == 'latest' ]]
+	if [[ $version == '1.17' || $version == 'latest' ]]
+	then
+		url="https://launcher.mojang.com/v1/objects/0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e/server.jar"
+	elif [[ $version == '1.16.5' ]]
 	then
 		url="https://launcher.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar"
 	elif [[ $version == '1.16.4' ]]
@@ -202,7 +220,11 @@ then
 	else
 		version=$2
 	fi
-	if [[ $version == '1.16.5' || $version == 'latest' ]]
+	
+	if [[ $version == '1.17' || $version == 'latest' ]]
+	then
+		url="https://download.getbukkit.org/spigot/spigot-1.17.jar"
+	elif [[ $version == '1.16.5' ]]
 	then
 		url="https://cdn.getbukkit.org/spigot/spigot-1.16.5.jar"
 	elif [[ $version == '1.16.4' ]]
@@ -283,6 +305,7 @@ else
 	else
 		version=$2
 	fi
+
 	if [[ $version == '1.16.5' || $version == 'latest' ]]
 	then
 		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/661/downloads/paper-1.16.5-661.jar"
@@ -440,7 +463,7 @@ Choice: "
 	then
 		if [[ $version == 'latest' ]]
 		then
-			version='1.16.5'
+			version='1.17'
 		fi
 		install_fabric
 		jar="fabric-server-launch.jar"
