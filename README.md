@@ -13,6 +13,7 @@ This is a script I made that will allow the user to easily and automatically cre
 
 - Server name will be the name of the directory where server will be led.
 - NOTE: Do not provide Mod loader argument for Spigot or paper servers.
+- NOTE 2: Run the script with sudo priviledges.
 
 ## License
 I have chosen to license this project under the GNU GPLv3.
