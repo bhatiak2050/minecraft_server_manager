@@ -304,7 +304,7 @@ else
 
 	if [[ $version == '1.17.1' ]]
 	then
-		url="https://papermc.io/api/v2/projects/paper/versions/1.17.1/builds/112/downloads/paper-1.17.1-112.jar"
+		url="https://papermc.io/api/v2/projects/paper/versions/1.17.1/builds/238/downloads/paper-1.17.1-238.jar"
 	elif [[ $version == '1.16.5' ]]
 	then
 		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/661/downloads/paper-1.16.5-661.jar"
@@ -385,7 +385,10 @@ Choice: "
 	if [[ $ins_mods == '1' ]]
 	then
 		furl=""
-		if [[ $version == '1.16.5' ]]
+		if [[ $version == '1.17.1' ]]
+		then
+			furl="https://maven.minecraftforge.net/net/minecraftforge/forge/1.17.1-37.0.50/forge-1.17.1-37.0.50-installer.jar"
+		elif [[ $version == '1.16.5' ]]
 		then
 			furl="https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.1.16/forge-1.16.5-36.1.16-installer.jar"
 		elif [[ $version == '1.16.4' ]]
