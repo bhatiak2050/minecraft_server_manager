@@ -109,18 +109,25 @@ else
 	choice=$1
 fi
 
+if [[ $2 == "" ]]
+then
+	read -p "Enter version: " version
+	if [[ $version == "latest" ]]
+	then
+		version="1.17.1"
+	fi
+else
+	version=$2
+fi
+
 if [[ $choice == 1 ]]
 then
 	echo "You have chosen to install Mojang server"
-	if [[ $2 == "" ]]
-	then
-		echo "Enter version: "
-		read version
-	else
-		version=$2
-	fi
 
-	if [[ $version == '1.17' || $version == 'latest' ]]
+	if [[ $version == '1.17.1' ]]
+	then
+		url="https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar"
+	elif [[ $version == '1.17' ]]
 	then
 		url="https://launcher.mojang.com/v1/objects/0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e/server.jar"
 	elif [[ $version == '1.16.5' ]]
@@ -213,15 +220,11 @@ then
 elif [[ $choice == 2 ]]
 then
 	echo "You have chosen to install Spigot server"
-	if [[ $2 == "" ]]
-	then
-		echo "Enter version: "
-		read version
-	else
-		version=$2
-	fi
 	
-	if [[ $version == '1.17' || $version == 'latest' ]]
+	if [[ $version == '1.17.1' ]]
+	then
+		url="https://download.getbukkit.org/spigot/spigot-1.17.1.jar"
+	elif [[ $version == '1.17' ]]
 	then
 		url="https://download.getbukkit.org/spigot/spigot-1.17.jar"
 	elif [[ $version == '1.16.5' ]]
@@ -298,15 +301,11 @@ then
 	jar="spigot.jar"
 else
 	echo "You have chosen to install Paper server"
-	if [[ $2 == "" ]]
-	then
-		echo "Enter version: "
-		read version
-	else
-		version=$2
-	fi
 
-	if [[ $version == '1.16.5' || $version == 'latest' ]]
+	if [[ $version == '1.17.1' ]]
+	then
+		url="https://papermc.io/api/v2/projects/paper/versions/1.17.1/builds/112/downloads/paper-1.17.1-112.jar"
+	elif [[ $version == '1.16.5' ]]
 	then
 		url="https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/661/downloads/paper-1.16.5-661.jar"
 	elif [[ $version == '1.15.2' ]]
@@ -348,6 +347,7 @@ then
 else
 	dir=$3
 fi
+
 if [[ $4 == "" ]]
 then
 	echo "Are you setting up a custom map? (y/n): "
@@ -384,9 +384,8 @@ Choice: "
 	# Forge
 	if [[ $ins_mods == '1' ]]
 	then
-		install_normal
 		furl=""
-		if [[ $version == '1.16.5' || $version == 'latest' ]]
+		if [[ $version == '1.16.5' ]]
 		then
 			furl="https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.1.16/forge-1.16.5-36.1.16-installer.jar"
 		elif [[ $version == '1.16.4' ]]
@@ -450,6 +449,9 @@ Choice: "
 			echo "Forge doesn't support $version"
 			echo "Aborting"
 		fi
+
+		install_normal
+
 		if [[ $furl != "" ]]
 		then
 			wget -O "forge_installer.jar" $furl
@@ -461,10 +463,6 @@ Choice: "
 	# Fabric
 	elif [[ $ins_mods == '2' ]]
 	then
-		if [[ $version == 'latest' ]]
-		then
-			version='1.17'
-		fi
 		install_fabric
 		jar="fabric-server-launch.jar"
 	# No Mod
